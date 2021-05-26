@@ -42,7 +42,7 @@ this should be a connection string or url
 DATABASE_URL="host=localhost port=5432 user=postgres password= dbname= sslmode=disable"
 **
 Docker Command for Postgres database:
-docker run --name database -d -p 5432:5432 -e POSTGRES_PASSWORD=password postgres:alpine
+docker run --name database -d -p 5432:5432 -e POSTGRES_PASSWORD=<(bGk}UtnTK}S2[9 postgres:alpine
 
 DB_URL Variable for docker database
 DATABASE_URL="host=localhost port=5432 user=postgres password=password dbname=postgres sslmode=disable"
