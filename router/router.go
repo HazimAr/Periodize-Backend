@@ -17,19 +17,19 @@ func Initalize(router *fiber.App) {
 	router.Use(middleware.Json)
 
 	users := router.Group("/users")
-	users.Post("/", handlers.CreateUser)
+	users.Put("/", handlers.CreateUser)
 	users.Delete("/", middleware.Authenticated, handlers.DeleteUser)
-	users.Put("/", middleware.Authenticated, handlers.ChangePassword)
+	users.Patch("/", middleware.Authenticated, handlers.ChangePassword)
 	users.Post("/me", middleware.Authenticated, handlers.GetUserInfo)
 	users.Post("/login", handlers.Login)
 	users.Delete("/logout", handlers.Logout)
 
 	products := router.Group("/products", middleware.Authenticated)
-	products.Post("/", handlers.CreateProduct)
+	products.Put("/", handlers.CreateProduct)
 	products.Post("/all", handlers.GetProducts)
 	products.Delete("/:id", handlers.DeleteProduct)
 	products.Post("/:id", handlers.GetProductById)
-	products.Put("/:id", handlers.UpdateProduct)
+	products.Patch("/:id", handlers.UpdateProduct)
 
 	router.Use(func(c *fiber.Ctx) error {
 		return c.Status(404).JSON(fiber.Map{
