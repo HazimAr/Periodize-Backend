@@ -31,7 +31,7 @@ func CreateProduct(c *fiber.Ctx) error {
 	}
 	return c.JSON(fiber.Map{
 		"code":    200,
-		"message": "sucess",
+		"message": "success",
 	})
 }
 func GetProducts(c *fiber.Ctx) error {
@@ -40,7 +40,7 @@ func GetProducts(c *fiber.Ctx) error {
 	db.Model(&model.Product{}).Order("ID asc").Limit(100).Find(&Products)
 	return c.JSON(fiber.Map{
 		"code":    200,
-		"message": "sucess",
+		"message": "success",
 		"data":    Products,
 	})
 }
@@ -110,7 +110,7 @@ func UpdateProduct(c *fiber.Ctx) error {
 	db.Save(&found)
 	return c.JSON(fiber.Map{
 		"code":    200,
-		"message": "sucess",
+		"message": "success",
 	})
 }
 func DeleteProduct(c *fiber.Ctx) error {
@@ -139,6 +139,6 @@ func DeleteProduct(c *fiber.Ctx) error {
 	db.Delete(&found)
 	return c.JSON(fiber.Map{
 		"code":    200,
-		"message": "sucess",
+		"message": "success",
 	})
 }
