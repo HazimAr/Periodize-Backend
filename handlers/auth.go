@@ -130,11 +130,11 @@ func CreateUser(c *fiber.Ctx) error {
 	new := User{
 		Username: strings.ToLower(json.Username),
 		Password: password,
-		Email:    json.Email,
+		Email:    strings.ToLower(json.Email),
 		ID:       guuid.New(),
 	}
 	found := User{}
-	query := User{Email: json.Email}
+	query := User{Email: strings.ToLower(json.Email)}
 	err = db.First(&found, &query).Error
 	if err != gorm.ErrRecordNotFound {
 		return c.JSON(fiber.Map{
@@ -177,7 +177,7 @@ func DeleteUser(c *fiber.Ctx) error {
 	type DeleteUserRequest struct {
 		password string
 	}
-	
+
 	db := database.DB
 	json := new(DeleteUserRequest)
 	user := c.Locals("user").(User)
