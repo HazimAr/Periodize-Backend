@@ -109,6 +109,7 @@ func CreateUser(c *fiber.Ctx) error {
 		Password string `json:"password"`
 		Username string `json:"username"`
 		Email    string `json:"email"`
+		Image 	 string `json:"image"`
 	}
 
 	db := database.DB
@@ -129,6 +130,7 @@ func CreateUser(c *fiber.Ctx) error {
 	}
 	new := User{
 		Username: strings.ToLower(json.Username),
+		Image: json.Image,
 		Password: password,
 		Email:    strings.ToLower(json.Email),
 		ID:       guuid.New(),
