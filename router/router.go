@@ -20,7 +20,7 @@ func Initalize(router *fiber.App) {
 	users.Put("/", handlers.CreateUser)
 	users.Delete("/", middleware.Authenticated, handlers.DeleteUser)
 	users.Patch("/", middleware.Authenticated, handlers.ChangePassword)
-	users.Get("/email", handlers.GetUserByEmail)
+	users.Post("/email", handlers.GetUserByEmail)
 	users.Patch("/forgot", handlers.ForgotPassword)
 	users.Post("/me", middleware.Authenticated, handlers.GetUserInfo)
 	users.Post("/login", handlers.Login)
