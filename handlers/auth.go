@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"strings"
 	"time"
 
 	"github.com/NikSchaefer/go-fiber/database"
@@ -48,7 +49,7 @@ func Login(c *fiber.Ctx) error {
 	}
 
 	found := User{}
-	query := User{Username: json.Username}
+	query := User{Username: strings.ToLower(json.Username)}
 	err := db.First(&found, &query).Error
 	if err == gorm.ErrRecordNotFound {
 		return c.JSON(fiber.Map{
@@ -127,7 +128,7 @@ func CreateUser(c *fiber.Ctx) error {
 		})
 	}
 	new := User{
-		Username: json.Username,
+		Username: strings.ToLower(json.Username),
 		Password: password,
 		Email:    json.Email,
 		ID:       guuid.New(),
@@ -176,21 +177,25 @@ func DeleteUser(c *fiber.Ctx) error {
 	type DeleteUserRequest struct {
 		password string
 	}
+	
 	db := database.DB
 	json := new(DeleteUserRequest)
 	user := c.Locals("user").(User)
+
 	if err := c.BodyParser(json); err != nil {
 		return c.JSON(fiber.Map{
 			"code":    400,
 			"message": "Invalid JSON",
 		})
 	}
+
 	if !comparePasswords(user.Password, []byte(json.password)) {
 		return c.JSON(fiber.Map{
 			"code":    401,
 			"message": "Invalid Password",
 		})
 	}
+
 	db.Model(&user).Association("Sessions").Delete()
 	db.Model(&user).Association("Products").Delete()
 	db.Delete(&user)
