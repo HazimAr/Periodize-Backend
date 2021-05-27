@@ -133,12 +133,12 @@ func CreateUser(c *fiber.Ctx) error {
 		ID:       guuid.New(),
 	}
 	found := User{}
-	query := User{Username: json.Username}
+	query := User{Email: json.Email}
 	err = db.First(&found, &query).Error
 	if err != gorm.ErrRecordNotFound {
 		return c.JSON(fiber.Map{
 			"code":    400,
-			"message": "User already exists",
+			"message": "User already exists with that email",
 		})
 	}
 	db.Create(&new)
@@ -165,7 +165,11 @@ func CreateUser(c *fiber.Ctx) error {
 
 func GetUserInfo(c *fiber.Ctx) error {
 	user := c.Locals("user").(User)
-	return c.JSON(user)
+	return c.JSON(fiber.Map{
+		"code":    200,
+		"message": "success",
+		"data":    user,
+	})
 }
 
 func DeleteUser(c *fiber.Ctx) error {
