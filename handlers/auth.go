@@ -220,9 +220,9 @@ func GetUserByEmail(c *fiber.Ctx) error {
 		})
 	}
 
-	found := User{}
+	user := User{}
 	query := User{Email: strings.ToLower(json.Email)}
-	err := db.First(&found, &query).Error
+	err := db.First(&user, &query).Error
 	if err != gorm.ErrRecordNotFound {
 		return c.JSON(fiber.Map{
 			"code":    401,
@@ -230,9 +230,10 @@ func GetUserByEmail(c *fiber.Ctx) error {
 		})
 	}
 	return c.JSON(fiber.Map{
-		"code":    200,
-		"message": "success",
-		"data":    found,
+		"code":    	200,
+		"message": 	"success",
+		"data":    	user,
+		"uuid": 	user.ID,
 	})
 
 }
@@ -264,6 +265,7 @@ func ForgotPassword(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{
 		"code":    200,
 		"message": "success",
+
 	})
 	
 }
