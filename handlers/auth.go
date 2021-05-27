@@ -206,6 +206,68 @@ func DeleteUser(c *fiber.Ctx) error {
 	})
 }
 
+func GetUserByEmail(c *fiber.Ctx) error {
+	type ForgotPasswordRequest struct {
+		Email string `json:"email"`
+	}
+	db := database.DB
+	json := new(ForgotPasswordRequest)
+
+	if err := c.BodyParser(json); err!=nil{
+		return c.JSON(fiber.Map{
+			"code":    400,
+			"message": "Invalid JSON",
+		})
+	}
+
+	found := User{}
+	query := User{Email: strings.ToLower(json.Email)}
+	err := db.First(&found, &query).Error
+	if err != gorm.ErrRecordNotFound {
+		return c.JSON(fiber.Map{
+			"code":    401,
+			"message": "User does not exist with that email",
+		})
+	}
+	return c.JSON(fiber.Map{
+		"code":    200,
+		"message": "success",
+		"data":    found,
+	})
+
+}
+
+func ForgotPassword(c *fiber.Ctx) error {
+	type ForgotPasswordRequest struct{
+		NewPassword string 		`json:"newPassword"`
+		Uuid 		guuid.UUID 	`json:"uuid"`
+	}
+	json := new(ForgotPasswordRequest)
+	if err := c.BodyParser(json); err != nil {
+		return c.JSON(fiber.Map{
+			"code":    400,
+			"message": "Invalid JSON",
+		})
+	}
+	db := database.DB
+	user := User{}
+	query := User{ID: json.Uuid}
+	err := db.First(&user, &query).Error
+	if err != gorm.ErrRecordNotFound {
+		return c.JSON(fiber.Map{
+			"code":    401,
+			"message": "User does not exist with that Uuid",
+		})
+	}
+	user.Password = hashAndSalt([]byte(json.NewPassword))
+	db.Save(&user)
+	return c.JSON(fiber.Map{
+		"code":    200,
+		"message": "success",
+	})
+	
+}
+
 func ChangePassword(c *fiber.Ctx) error {
 	type ChangePasswordRequest struct {
 		Password    string `json:"password"`
@@ -238,6 +300,7 @@ func hashAndSalt(pwd []byte) string {
 	hash, _ := bcrypt.GenerateFromPassword(pwd, bcrypt.MinCost)
 	return string(hash)
 }
+
 func comparePasswords(hashedPwd string, plainPwd []byte) bool {
 	byteHash := []byte(hashedPwd)
 	err := bcrypt.CompareHashAndPassword(byteHash, plainPwd)
