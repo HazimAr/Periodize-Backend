@@ -65,12 +65,7 @@ func Login(c *fiber.Ctx) error {
 	}
 	session := Session{UserRefer: found.ID, Expires: SessionExpires(), Sessionid: guuid.New()}
 	db.Create(&session)
-	c.Cookie(&fiber.Cookie{
-		Name:     "sessionid",
-		Expires:  SessionExpires(),
-		Value:    session.Sessionid.String(),
-		HTTPOnly: true,
-	})
+
 	return c.JSON(fiber.Map{
 		"code":    200,
 		"message": "success",
@@ -153,12 +148,6 @@ func CreateUser(c *fiber.Ctx) error {
 			"message": "Creation Error",
 		})
 	}
-	c.Cookie(&fiber.Cookie{
-		Name:     "sessionid",
-		Expires:  time.Now().Add(5 * 24 * time.Hour),
-		Value:    session.Sessionid.String(),
-		HTTPOnly: true,
-	})
 	return c.JSON(fiber.Map{
 		"code":    200,
 		"message": "success",
