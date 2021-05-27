@@ -223,7 +223,7 @@ func GetUserByEmail(c *fiber.Ctx) error {
 	user := User{}
 	query := User{Email: strings.ToLower(json.Email)}
 	err := db.First(&user, &query).Error
-	if err != gorm.ErrRecordNotFound {
+	if err == gorm.ErrRecordNotFound {
 		return c.JSON(fiber.Map{
 			"code":    401,
 			"message": "User does not exist with that email",
