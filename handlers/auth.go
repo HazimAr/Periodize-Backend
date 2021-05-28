@@ -140,7 +140,7 @@ func CreateUser(c *fiber.Ctx) error {
 		})
 	}
 	db.Create(&new)
-	session := Session{UserRefer: new.ID, Sessionid: guuid.New()}
+	session := Session{UserRefer: new.ID, Expires: SessionExpires(), Sessionid: guuid.New()}
 	err = db.Create(&session).Error
 	if err != nil {
 		return c.JSON(fiber.Map{
