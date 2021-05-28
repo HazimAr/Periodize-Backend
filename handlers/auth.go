@@ -36,7 +36,7 @@ func GetUser(sessionid guuid.UUID) (User, error) {
 
 func Login(c *fiber.Ctx) error {
 	type LoginRequest struct {
-		Username string `json:"username"`
+		Email 	 string `json:"email"`
 		Password string `json:"password"`
 	}
 	db := database.DB
@@ -49,7 +49,7 @@ func Login(c *fiber.Ctx) error {
 	}
 
 	found := User{}
-	query := User{Username: strings.ToLower(json.Username)}
+	query := User{Email: json.Email}
 	err := db.First(&found, &query).Error
 	if err == gorm.ErrRecordNotFound {
 		return c.JSON(fiber.Map{
