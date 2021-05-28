@@ -245,7 +245,7 @@ func ForgotPassword(c *fiber.Ctx) error {
 	user := User{}
 	query := User{ID: json.Uuid}
 	err := db.First(&user, &query).Error
-	if err != gorm.ErrRecordNotFound {
+	if err == gorm.ErrRecordNotFound {
 		return c.JSON(fiber.Map{
 			"code":    401,
 			"message": "User does not exist with that Uuid",
