@@ -19,4 +19,4 @@ services:
     depends_on:
       - db
     environment: 
-      - DATABASE_URL="host=postgres port=5432 user=postgres password=<(bGk}UtnTK}S2[9 dbname=postgres sslmode=disable"
+      - DATABASE_URL="host=postgres port=5432 user=postgres password=password dbname=postgres sslmode=disable"
