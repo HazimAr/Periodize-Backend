@@ -5,8 +5,8 @@ import (
 )
 
 type User struct {
-	Token     guuid.UUID `gorm:"primaryKey" json:"-"`
-	ID	  	  guuid.UUID `gorm:"primaryKey" json:"-"`
+	ID     guuid.UUID `gorm:"primaryKey" json:"-"`
+	Token	  	  guuid.UUID `gorm:"primaryKey" json:"-"`
 	Image	  string 	 `json:"image"`
 	Username  string     `json:"username"`
 	Email     string     `json:"email"`

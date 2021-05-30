@@ -26,7 +26,7 @@ func GetUser(sessionid guuid.UUID) (User, error) {
 		return User{}, err
 	}
 	user := User{}
-	usrQuery := User{Token: found.UserRefer}
+	usrQuery := User{ID: found.UserRefer}
 	err = db.First(&user, &usrQuery).Error
 	if err == gorm.ErrRecordNotFound {
 		return User{}, err
@@ -63,7 +63,7 @@ func Login(c *fiber.Ctx) error {
 			"message": "Invalid Password",
 		})
 	}
-	session := Session{UserRefer: found.Token, Expires: SessionExpires(), Sessionid: guuid.New()}
+	session := Session{UserRefer: found.ID, Expires: SessionExpires(), Sessionid: guuid.New()}
 	db.Create(&session)
 
 	return c.JSON(fiber.Map{
@@ -128,6 +128,7 @@ func CreateUser(c *fiber.Ctx) error {
 		Image: json.Image,
 		Password: password,
 		Email:    strings.ToLower(json.Email),
+		ID:       guuid.New(),
 		Token:       guuid.New(),
 	}
 	found := User{}
@@ -140,7 +141,7 @@ func CreateUser(c *fiber.Ctx) error {
 		})
 	}
 	db.Create(&new)
-	session := Session{UserRefer: new.Token, Expires: SessionExpires(), Sessionid: guuid.New()}
+	session := Session{UserRefer: new.ID, Expires: SessionExpires(), Sessionid: guuid.New()}
 	err = db.Create(&session).Error
 	if err != nil {
 		return c.JSON(fiber.Map{
@@ -232,7 +233,7 @@ func GetUserByEmail(c *fiber.Ctx) error {
 func ForgotPassword(c *fiber.Ctx) error {
 	type ForgotPasswordRequest struct{
 		NewPassword string 		`json:"newPassword"`
-		Uuid 		guuid.UUID 	`json:"uuid"`
+		Token 		guuid.UUID 	`json:"Token"`
 	}
 	json := new(ForgotPasswordRequest)
 	if err := c.BodyParser(json); err != nil {
@@ -243,12 +244,12 @@ func ForgotPassword(c *fiber.Ctx) error {
 	}
 	db := database.DB
 	user := User{}
-	query := User{Token: json.Uuid}
+	query := User{Token: json.Token}
 	err := db.First(&user, &query).Error
 	if err == gorm.ErrRecordNotFound {
 		return c.JSON(fiber.Map{
 			"code":    404,
-			"message": "User does not exist with that Uuid",
+			"message": "User does not exist with that Token",
 		})
 	}
 	user.Password = hashAndSalt([]byte(json.NewPassword))
