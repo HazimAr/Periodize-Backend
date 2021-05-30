@@ -26,7 +26,7 @@ func GetUser(sessionid guuid.UUID) (User, error) {
 		return User{}, err
 	}
 	user := User{}
-	usrQuery := User{ID: found.UserRefer}
+	usrQuery := User{Token: found.UserRefer}
 	err = db.First(&user, &usrQuery).Error
 	if err == gorm.ErrRecordNotFound {
 		return User{}, err
@@ -63,7 +63,7 @@ func Login(c *fiber.Ctx) error {
 			"message": "Invalid Password",
 		})
 	}
-	session := Session{UserRefer: found.ID, Expires: SessionExpires(), Sessionid: guuid.New()}
+	session := Session{UserRefer: found.Token, Expires: SessionExpires(), Sessionid: guuid.New()}
 	db.Create(&session)
 
 	return c.JSON(fiber.Map{
@@ -128,19 +128,19 @@ func CreateUser(c *fiber.Ctx) error {
 		Image: json.Image,
 		Password: password,
 		Email:    strings.ToLower(json.Email),
-		ID:       guuid.New(),
+		Token:       guuid.New(),
 	}
 	found := User{}
 	query := User{Email: strings.ToLower(json.Email)}
 	err = db.First(&found, &query).Error
 	if err != gorm.ErrRecordNotFound {
 		return c.JSON(fiber.Map{
-			"code":    400,
+			"code":    403,
 			"message": "User already exists with that email",
 		})
 	}
 	db.Create(&new)
-	session := Session{UserRefer: new.ID, Expires: SessionExpires(), Sessionid: guuid.New()}
+	session := Session{UserRefer: new.Token, Expires: SessionExpires(), Sessionid: guuid.New()}
 	err = db.Create(&session).Error
 	if err != nil {
 		return c.JSON(fiber.Map{
@@ -216,7 +216,7 @@ func GetUserByEmail(c *fiber.Ctx) error {
 	err := db.First(&user, &query).Error
 	if err == gorm.ErrRecordNotFound {
 		return c.JSON(fiber.Map{
-			"code":    401,
+			"code":    404,
 			"message": "User does not exist with that email",
 		})
 	}
@@ -224,7 +224,7 @@ func GetUserByEmail(c *fiber.Ctx) error {
 		"code":    	200,
 		"message": 	"success",
 		"data":    	user,
-		"uuid": 	user.ID,
+		"token": 	user.Token,
 	})
 
 }
@@ -243,11 +243,11 @@ func ForgotPassword(c *fiber.Ctx) error {
 	}
 	db := database.DB
 	user := User{}
-	query := User{ID: json.Uuid}
+	query := User{Token: json.Uuid}
 	err := db.First(&user, &query).Error
 	if err == gorm.ErrRecordNotFound {
 		return c.JSON(fiber.Map{
-			"code":    401,
+			"code":    404,
 			"message": "User does not exist with that Uuid",
 		})
 	}

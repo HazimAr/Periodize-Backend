@@ -21,7 +21,7 @@ func CreateProduct(c *fiber.Ctx) error {
 	}
 	user := c.Locals("user").(User)
 	newProduct := Product{
-		UserRefer: user.ID,
+		UserRefer: user.Token,
 		Name:      json.Name,
 		Value:     json.Value,
 	}
@@ -92,7 +92,7 @@ func UpdateProduct(c *fiber.Ctx) error {
 	found := Product{}
 	query := Product{
 		ID:        id,
-		UserRefer: user.ID,
+		UserRefer: user.Token,
 	}
 	err = db.First(&found, &query).Error
 	if err == gorm.ErrRecordNotFound {
@@ -127,7 +127,7 @@ func DeleteProduct(c *fiber.Ctx) error {
 	found := Product{}
 	query := Product{
 		ID:        id,
-		UserRefer: user.ID,
+		UserRefer: user.Token,
 	}
 	err = db.First(&found, &query).Error
 	if err == gorm.ErrRecordNotFound {
