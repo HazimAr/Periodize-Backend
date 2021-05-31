@@ -1,15 +1,18 @@
 package main
 
 import (
+	// "fmt"
 	"log"
 	"os"
 
 	"github.com/NikSchaefer/go-fiber/database"
 	"github.com/NikSchaefer/go-fiber/router"
 
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/joho/godotenv"
+	// "github.com/gomodule/redigo/redis"
 )
 
 func getenv(key, fallback string) string {
@@ -32,6 +35,12 @@ func main() {
 
 	router.Initalize(app)
 	log.Fatal(app.Listen(":" + getenv("PORT", "3000")))
+
+	// c, err := redis.DialURL(os.Getenv("REDIS_URL"),  redis.DialTLSSkipVerify(true))
+	// if err != nil {
+	// 	fmt.Print(err)
+	// }
+	// defer c.Close()
 }
 
 /*

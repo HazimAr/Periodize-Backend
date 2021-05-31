@@ -4,7 +4,9 @@ go 1.16
 
 require (
 	github.com/badoux/checkmail v1.2.1
+	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/gofiber/fiber/v2 v2.5.0
+	github.com/gomodule/redigo v1.8.4 // indirect
 	github.com/google/uuid v1.2.0
 	github.com/joho/godotenv v1.3.0
 	github.com/lib/pq v1.10.0 // indirect
