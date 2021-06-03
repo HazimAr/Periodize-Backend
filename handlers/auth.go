@@ -124,7 +124,7 @@ func CreateUser(c *fiber.Ctx) error {
 		})
 	}
 	new := User{
-		Username: strings.ToLower(json.Username),
+		Username: json.Username,
 		Image: json.Image,
 		Password: password,
 		Email:    strings.ToLower(json.Email),
@@ -260,6 +260,29 @@ func ForgotPassword(c *fiber.Ctx) error {
 
 	})
 	
+}
+
+func UpdateUser(c *fiber.Ctx) error {
+	json := new(User)
+	if err := c.BodyParser(json); err != nil {
+		return c.JSON(fiber.Map{
+			"code":    400,
+			"message": "Invalid JSON",
+		})
+	}
+	
+	db := database.DB
+	user := c.Locals("user").(User)
+
+	user.Username = json.Username
+	user.Email = json.Email
+	user.Image = json.Image
+	db.Save(&user)
+	return c.JSON(fiber.Map{
+		"code":    200,
+		"message": "success",
+
+	})
 }
 
 func ChangePassword(c *fiber.Ctx) error {

@@ -25,6 +25,7 @@ func Initalize(router *fiber.App) {
 	users.Post("/me", middleware.Authenticated, handlers.GetUserInfo)
 	users.Post("/login", handlers.Login)
 	users.Post("/logout", handlers.Logout)
+	users.Patch("/update", middleware.Authenticated, handlers.UpdateUser)
 
 	products := router.Group("/products", middleware.Authenticated)
 	products.Put("/", handlers.CreateProduct)
