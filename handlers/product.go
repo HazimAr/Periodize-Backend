@@ -27,6 +27,7 @@ func CreateProduct(c *fiber.Ctx) error {
 		Descripion:	json.Descripion,
 		Experience: json.Experience,
 		Private:	json.Private,
+		Sport:		json.Sport,
 	}
 
 	err := db.Create(&newProduct).Error
@@ -78,7 +79,8 @@ func UpdateProduct(c *fiber.Ctx) error {
 		Name      	string 	`json:"name"`
 		Descripion 	string 	`json:"description"`
 		Private		bool 	`json:"private"`
-		Experience  []int8 	`json:"experience"`
+		Experience  []string`json:"experience"`
+		Sport		string	`json:"sport"`
 		Sessionid 	string 	`json:"sessionid"`
 	}
 
@@ -119,6 +121,7 @@ func UpdateProduct(c *fiber.Ctx) error {
 	found.Descripion = json.Descripion
 	found.Private = json.Private
 	found.Experience = json.Experience
+	found.Sport = json.Sport
 	
 	db.Save(&found)
 	return c.JSON(fiber.Map{
