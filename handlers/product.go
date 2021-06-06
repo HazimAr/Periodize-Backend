@@ -76,12 +76,12 @@ func GetProductById(c *fiber.Ctx) error {
 
 func UpdateProduct(c *fiber.Ctx) error {
 	type UpdateProductRequest struct {
-		Name      	string 	`json:"name"`
-		Descripion 	string 	`json:"description"`
-		Private		bool 	`json:"private"`
-		Experience  []string`json:"experience"`
-		Sport		string	`json:"sport"`
-		Sessionid 	string 	`json:"sessionid"`
+		Name      	string 		`json:"name"`
+		Descripion 	string 		`json:"description"`
+		Private		bool 		`json:"private"`
+		Experience  []string	`json:"experience"`
+		Sport		[]string	`json:"sport"`
+		Sessionid 	string 		`json:"sessionid"`
 	}
 
 	db := database.DB
