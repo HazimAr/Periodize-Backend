@@ -11,5 +11,5 @@ type Product struct {
 	Descripion	string     	`json:"description"`
 	Private		bool		`gorm:"default:false" json:"private"`
 	Experience 	[]string	`json:"experience"`
-	Sport		string		`json:"sport"`
+	Sport		[]string	`json:"sport"`
 }
