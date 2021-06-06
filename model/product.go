@@ -7,6 +7,8 @@ type Product struct {
 	CreatedAt 	int64      	`gorm:"autoCreateTime" json:"-" `
 	UpdatedAt 	int64      	`gorm:"autoUpdateTime" json:"-"`
 	UserRefer 	guuid.UUID 	`json:"-"`
-	Descripion	string     	`json:"description"`
 	Name      	string     	`json:"name"`
+	Descripion	string     	`json:"description"`
+	Private		bool		`gorm:"default:false" json:"private"`
+	Experience 	[]int8		`json:"experience"`
 }

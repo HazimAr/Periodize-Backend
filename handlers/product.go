@@ -19,21 +19,27 @@ func CreateProduct(c *fiber.Ctx) error {
 			"message": "Invalid JSON",
 		})
 	}
+
 	user := c.Locals("user").(User)
 	newProduct := Product{
-		UserRefer: user.ID,
-		Name:      json.Name,
-		Value:     json.Value,
+		UserRefer:	user.ID,
+		Name:      	json.Name,
+		Descripion:	json.Descripion,
+		Experience: json.Experience,
+		Private:	json.Private,
 	}
+
 	err := db.Create(&newProduct).Error
 	if err != nil {
 		return c.SendStatus(fiber.StatusBadRequest)
 	}
+
 	return c.JSON(fiber.Map{
 		"code":    200,
 		"message": "success",
 	})
 }
+
 func GetProducts(c *fiber.Ctx) error {
 	db := database.DB
 	Products := []Product{}
@@ -44,6 +50,7 @@ func GetProducts(c *fiber.Ctx) error {
 		"data":    Products,
 	})
 }
+
 func GetProductById(c *fiber.Ctx) error {
 	db := database.DB
 	param := c.Params("id")
@@ -68,10 +75,13 @@ func GetProductById(c *fiber.Ctx) error {
 
 func UpdateProduct(c *fiber.Ctx) error {
 	type UpdateProductRequest struct {
-		Name      string `json:"name"`
-		Value     string `json:"value"`
-		Sessionid string `json:"sessionid"`
+		Name      	string 	`json:"name"`
+		Descripion 	string 	`json:"description"`
+		Private		bool 	`json:"private"`
+		Experience  []int8 	`json:"experience"`
+		Sessionid 	string 	`json:"sessionid"`
 	}
+
 	db := database.DB
 	user := c.Locals("user").(User)
 	json := new(UpdateProductRequest)
@@ -81,6 +91,7 @@ func UpdateProduct(c *fiber.Ctx) error {
 			"message": "Invalid JSON",
 		})
 	}
+
 	param := c.Params("id")
 	id, err := strconv.Atoi(param)
 	if err != nil {
@@ -89,11 +100,13 @@ func UpdateProduct(c *fiber.Ctx) error {
 			"message": "Invalid ID format",
 		})
 	}
+
 	found := Product{}
 	query := Product{
 		ID:        id,
 		UserRefer: user.ID,
 	}
+
 	err = db.First(&found, &query).Error
 	if err == gorm.ErrRecordNotFound {
 		return c.JSON(fiber.Map{
@@ -101,18 +114,19 @@ func UpdateProduct(c *fiber.Ctx) error {
 			"message": "Product not found",
 		})
 	}
-	if json.Name != "" {
-		found.Name = json.Name
-	}
-	if json.Value != "" {
-		found.Value = json.Value
-	}
+
+	found.Name = json.Name
+	found.Descripion = json.Descripion
+	found.Private = json.Private
+	found.Experience = json.Experience
+	
 	db.Save(&found)
 	return c.JSON(fiber.Map{
 		"code":    200,
 		"message": "success",
 	})
 }
+
 func DeleteProduct(c *fiber.Ctx) error {
 	db := database.DB
 	user := c.Locals("user").(User)
