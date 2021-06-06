@@ -6,7 +6,7 @@ import (
 
 type User struct {
 	ID		  guuid.UUID `gorm:"primaryKey" json:"-"`
-	Token	  guuid.UUID `gorm:"primaryKey" json:"-"`
+	// Token	  guuid.UUID `gorm:"primaryKey" json:"-"`
 	Image	  string 	 `json:"image"`
 	Username  string     `json:"username"`
 	Email     string     `json:"email"`
