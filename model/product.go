@@ -4,8 +4,8 @@ import guuid "github.com/google/uuid"
 
 type Product struct {
 	ID        	int       	`gorm:"primaryKey" json:"id"`
-	CreatedAt 	int64      	`gorm:"autoCreateTime" json:"-" `
-	UpdatedAt 	int64      	`gorm:"autoUpdateTime" json:"-"`
+	CreatedAt 	int64      	`gorm:"autoCreateTime" json:"created" `
+	UpdatedAt 	int64      	`gorm:"autoUpdateTime" json:"updated"`
 	UserRefer 	guuid.UUID 	`json:"-"`
 	Name      	string     	`json:"name"`
 	Descripion	string     	`json:"description"`
