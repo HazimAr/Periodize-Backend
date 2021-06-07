@@ -49,7 +49,7 @@ func CreateProduct(c *fiber.Ctx) error {
 func GetProducts(c *fiber.Ctx) error {
 	db := database.DB
 	Products := []Product{}
-	db.Model(&model.Product{}).Order("CreatedAt desc").Limit(100).Find(&Products)
+	db.Model(&model.Product{}).Order("created_at desc").Limit(100).Find(&Products)
 	return c.JSON(fiber.Map{
 		"code":    200,
 		"message": "success",
