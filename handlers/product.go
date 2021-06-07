@@ -32,7 +32,12 @@ func CreateProduct(c *fiber.Ctx) error {
 
 	err := db.Create(&newProduct).Error
 	if err != nil {
-		return c.SendStatus(fiber.StatusBadRequest)
+		if err := c.BodyParser(json); err != nil {
+		return c.JSON(fiber.Map{
+			"code":    400,
+			"message": "Bad Request",
+		})
+	}
 	}
 
 	return c.JSON(fiber.Map{
@@ -44,7 +49,7 @@ func CreateProduct(c *fiber.Ctx) error {
 func GetProducts(c *fiber.Ctx) error {
 	db := database.DB
 	Products := []Product{}
-	db.Model(&model.Product{}).Order("ID asc").Limit(100).Find(&Products)
+	db.Model(&model.Product{}).Order("CreatedAt desc").Limit(100).Find(&Products)
 	return c.JSON(fiber.Map{
 		"code":    200,
 		"message": "success",
@@ -71,7 +76,11 @@ func GetProductById(c *fiber.Ctx) error {
 			"message": "Product not found",
 		})
 	}
-	return c.Status(fiber.StatusOK).JSON(product)
+	return c.JSON(fiber.Map{
+		"code":    200,
+		"message": "success",
+		"data":    product,
+	})
 }
 
 func UpdateProduct(c *fiber.Ctx) error {
