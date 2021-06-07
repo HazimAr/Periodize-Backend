@@ -79,8 +79,8 @@ func UpdateProduct(c *fiber.Ctx) error {
 		Name      	string 		`json:"name"`
 		Descripion 	string 		`json:"description"`
 		Private		bool 		`json:"private"`
-		Experience  string	`json:"experience"`
-		Sport		string	`json:"sport"`
+		Experience  string		`json:"experience"`
+		Sport		string		`json:"sport"`
 		Sessionid 	string 		`json:"sessionid"`
 	}
 
