@@ -5,10 +5,10 @@ import (
 )
 
 type User struct {
-	Sessions  []Session  `gorm:"foreignKey:UserRefer; constraint:OnUpdate:CASCADE, OnDelete:CASCADE;" json:"-"`
-	Products  []Product  `gorm:"foreignKey:UserRefer; constraint:OnUpdate:CASCADE, OnDelete:CASCADE;" json:"-"`
 	ID		  guuid.UUID `gorm:"primaryKey" json:"-"`
 	Token	  guuid.UUID `json:"-"`
+	Sessions  []Session  `gorm:"foreignKey:UserRefer; constraint:OnUpdate:CASCADE, OnDelete:CASCADE;" json:"-"`
+	Products  []Product  `gorm:"foreignKey:UserRefer; constraint:OnUpdate:CASCADE, OnDelete:CASCADE;" json:"-"`
 	Image	  string 	 `json:"image"`
 	Username  string     `json:"username"`
 	Email     string     `json:"email"`
