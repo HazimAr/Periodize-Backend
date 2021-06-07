@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"math/rand"
 	"strings"
 	"time"
 
@@ -129,7 +130,7 @@ func CreateUser(c *fiber.Ctx) error {
 		Password: password,
 		Email:    strings.ToLower(json.Email),
 		ID:       guuid.New(),
-		Token:       guuid.New(),
+		Token:     rand.Intn(2147483648),
 	}
 	found := User{}
 	query := User{Email: strings.ToLower(json.Email)}
@@ -233,7 +234,7 @@ func GetUserByEmail(c *fiber.Ctx) error {
 func ForgotPassword(c *fiber.Ctx) error {
 	type ForgotPasswordRequest struct{
 		NewPassword string 		`json:"newPassword"`
-		Token 		guuid.UUID 	`json:"Token"`
+		Token 		int 		`json:"Token"`
 	}
 	json := new(ForgotPasswordRequest)
 	if err := c.BodyParser(json); err != nil {
