@@ -5,6 +5,7 @@ import (
 
 	"github.com/NikSchaefer/go-fiber/database"
 	"github.com/NikSchaefer/go-fiber/model"
+	"github.com/google/uuid"
 
 	"github.com/gofiber/fiber/v2"
 	"gorm.io/gorm"
@@ -22,6 +23,7 @@ func CreateProduct(c *fiber.Ctx) error {
 
 	user := c.Locals("user").(User)
 	newProduct := Product{
+		Uuid:		uuid.New(),
 		UserRefer:	user.ID,
 		Name:      	json.Name,
 		Descripion:	json.Descripion,
