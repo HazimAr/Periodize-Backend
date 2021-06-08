@@ -3,8 +3,7 @@ package model
 import guuid "github.com/google/uuid"
 
 type Product struct {
-	Uuid		guuid.UUID	`gorm:"primaryKey" json:"uuid"`
-	ID        	int       	`gorm:"primaryKey" json:"id"`
+	ID			guuid.UUID	`gorm:"primaryKey" json:"id"`
 	CreatedAt 	int64      	`gorm:"autoCreateTime" json:"created"`
 	UpdatedAt 	int64      	`gorm:"autoUpdateTime" json:"updated"`
 	UserRefer 	guuid.UUID 	`json:"-"`

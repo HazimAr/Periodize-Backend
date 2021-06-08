@@ -23,7 +23,7 @@ func CreateProduct(c *fiber.Ctx) error {
 
 	user := c.Locals("user").(User)
 	newProduct := Product{
-		Uuid:		uuid.New(),
+		ID:			uuid.New(),
 		UserRefer:	user.ID,
 		Name:      	json.Name,
 		Descripion:	json.Descripion,
