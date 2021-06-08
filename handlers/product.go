@@ -63,7 +63,7 @@ func GetProducts(c *fiber.Ctx) error {
 func GetProductById(c *fiber.Ctx) error {
 	db := database.DB
 	param := c.Params("id")
-	id, err := strconv.Atoi(param)
+	id, err := uuid.Parse(param)
 	if err != nil {
 		return c.JSON(fiber.Map{
 			"code":    400,
@@ -107,7 +107,7 @@ func UpdateProduct(c *fiber.Ctx) error {
 	}
 
 	param := c.Params("id")
-	id, err := strconv.Atoi(param)
+	id, err := uuid.Parse(param)
 	if err != nil {
 		return c.JSON(fiber.Map{
 			"code":    400,
@@ -146,7 +146,7 @@ func DeleteProduct(c *fiber.Ctx) error {
 	db := database.DB
 	user := c.Locals("user").(User)
 	param := c.Params("id")
-	id, err := strconv.Atoi(param)
+	id, err := uuid.Parse(param)
 	if err != nil {
 		return c.JSON(fiber.Map{
 			"code":    400,
