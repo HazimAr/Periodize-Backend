@@ -51,7 +51,7 @@ func GetProducts(c *fiber.Ctx) error {
 	user := c.Locals("user").(User)
 	db := database.DB
 	Products := []Product{}
-	db.Model(&model.Product{}).Where("user_refer = ?", user.ID).Order("created_at desc").Limit(100).Find(&Products)
+	db.Model(&model.Product{}).Where("user_refer = ?",  user.ID.String()).Order("created_at desc").Limit(100).Find(&Products)
 	return c.JSON(fiber.Map{
 		"code":    200,
 		"message": "success",
