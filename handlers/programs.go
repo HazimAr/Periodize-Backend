@@ -1,7 +1,6 @@
 package handlers
 
 import (
-
 	"github.com/NikSchaefer/go-fiber/database"
 	"github.com/NikSchaefer/go-fiber/model"
 	"github.com/google/uuid"
@@ -10,9 +9,11 @@ import (
 	"gorm.io/gorm"
 )
 
-func CreateProduct(c *fiber.Ctx) error {
+type Program model.Program
+
+func CreateProgram(c *fiber.Ctx) error {
 	db := database.DB
-	json := new(Product)
+	json := new(Program)
 	if err := c.BodyParser(json); err != nil {
 		return c.JSON(fiber.Map{
 			"code":    400,
@@ -21,45 +22,41 @@ func CreateProduct(c *fiber.Ctx) error {
 	}
 
 	user := c.Locals("user").(User)
-	newProduct := Product{
+	newProgram := Program{
 		ID:			uuid.New(),
 		UserRefer:	user.ID,
-		Name:      	json.Name,
+		Title:      json.Title,
 		Descripion:	json.Descripion,
-		Experience: json.Experience,
-		Private:	json.Private,
-		Sport:		json.Sport,
+		Days: 		json.Days,
 	}
 
-	err := db.Create(&newProduct).Error
+	err := db.Create(&newProgram).Error
 	if err != nil {
-		if err := c.BodyParser(json); err != nil {
 		return c.JSON(fiber.Map{
-			"code":    400,
-			"message": "Bad Request",
+			"code":    500,
+			"message": "Creation Error",
 		})
 	}
-	}
-
+	
 	return c.JSON(fiber.Map{
 		"code":    200,
 		"message": "success",
 	})
 }
 
-func GetProducts(c *fiber.Ctx) error {
+func GetPrograms(c *fiber.Ctx) error {
 	user := c.Locals("user").(User)
 	db := database.DB
-	Products := []Product{}
-	db.Model(&model.Product{}).Where("user_refer = ?",  user.ID.String()).Order("created_at desc").Limit(100).Find(&Products)
+	Programs := []Program{}
+	db.Model(&model.Program{}).Where("user_refer = ?",  user.ID.String()).Order("created_at desc").Limit(100).Find(&Programs)
 	return c.JSON(fiber.Map{
 		"code":    200,
 		"message": "success",
-		"data":    Products,
+		"data":    Programs,
 	})
 }
 
-func GetProductById(c *fiber.Ctx) error {
+func GetProgramById(c *fiber.Ctx) error {
 	db := database.DB
 	param := c.Params("id")
 	id, err := uuid.Parse(param)
@@ -69,24 +66,24 @@ func GetProductById(c *fiber.Ctx) error {
 			"message": "Invalid ID Format",
 		})
 	}
-	product := Product{}
-	query := Product{ID: id}
-	err = db.First(&product, &query).Error
+	program := Program{}
+	query := Program{ID: id}
+	err = db.First(&program, &query).Error
 	if err == gorm.ErrRecordNotFound {
 		return c.JSON(fiber.Map{
 			"code":    404,
-			"message": "Product not found",
+			"message": "Program not found",
 		})
 	}
 	return c.JSON(fiber.Map{
 		"code":    200,
 		"message": "success",
-		"data":    product,
+		"data":    program,
 	})
 }
 
-func UpdateProduct(c *fiber.Ctx) error {
-	type UpdateProductRequest struct {
+func UpdateProgram(c *fiber.Ctx) error {
+	type UpdateProgramRequest struct {
 		Name      	string 		`json:"name"`
 		Descripion 	string 		`json:"description"`
 		Private		bool 		`json:"private"`
@@ -97,7 +94,7 @@ func UpdateProduct(c *fiber.Ctx) error {
 
 	db := database.DB
 	user := c.Locals("user").(User)
-	json := new(UpdateProductRequest)
+	json := new(UpdateProgramRequest)
 	if err := c.BodyParser(json); err != nil {
 		return c.JSON(fiber.Map{
 			"code":    400,
@@ -114,8 +111,8 @@ func UpdateProduct(c *fiber.Ctx) error {
 		})
 	}
 
-	found := Product{}
-	query := Product{
+	found := Program{}
+	query := Program{
 		ID:        id,
 		UserRefer: user.ID,
 	}
@@ -124,15 +121,15 @@ func UpdateProduct(c *fiber.Ctx) error {
 	if err == gorm.ErrRecordNotFound {
 		return c.JSON(fiber.Map{
 			"code":    404,
-			"message": "Product not found",
+			"message": "Program not found",
 		})
 	}
 
-	found.Name = json.Name
-	found.Descripion = json.Descripion
-	found.Private = json.Private
-	found.Experience = json.Experience
-	found.Sport = json.Sport
+	// found.Name = json.Name
+	// found.Descripion = json.Descripion
+	// found.Private = json.Private
+	// found.Experience = json.Experience
+	// found.Sport = json.Sport
 	
 	db.Save(&found)
 	return c.JSON(fiber.Map{
@@ -141,7 +138,7 @@ func UpdateProduct(c *fiber.Ctx) error {
 	})
 }
 
-func DeleteProduct(c *fiber.Ctx) error {
+func DeleteProgram(c *fiber.Ctx) error {
 	db := database.DB
 	user := c.Locals("user").(User)
 	param := c.Params("id")
@@ -152,8 +149,8 @@ func DeleteProduct(c *fiber.Ctx) error {
 			"message": "Invalid ID format",
 		})
 	}
-	found := Product{}
-	query := Product{
+	found := Program{}
+	query := Program{
 		ID:        id,
 		UserRefer: user.ID,
 	}
@@ -161,7 +158,7 @@ func DeleteProduct(c *fiber.Ctx) error {
 	if err == gorm.ErrRecordNotFound {
 		return c.JSON(fiber.Map{
 			"code":    400,
-			"message": "Product not found",
+			"message": "Program not found",
 		})
 	}
 	db.Delete(&found)

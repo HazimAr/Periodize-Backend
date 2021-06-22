@@ -15,7 +15,7 @@ import (
 
 type User model.User
 type Session model.Session
-type Product model.Product
+type Product model.Program
 
 func GetUser(sessionid guuid.UUID) (User, error) {
 	db := database.DB
