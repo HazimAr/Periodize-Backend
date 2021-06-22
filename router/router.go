@@ -18,7 +18,7 @@ func Initalize(router *fiber.App) {
 
 	users := router.Group("/users")
 	users.Put("/", handlers.CreateUser)
-	users.Delete("/", middleware.Authenticated, handlers.DeleteUser)
+	users.Put("/", middleware.Authenticated, handlers.DeleteUser)
 	users.Patch("/", middleware.Authenticated, handlers.ChangePassword)
 	users.Post("/email", handlers.GetUserByEmail)
 	users.Patch("/forgot", handlers.ForgotPassword)
@@ -30,7 +30,7 @@ func Initalize(router *fiber.App) {
 	programs := router.Group("/programs", middleware.Authenticated)
 	programs.Put("/", handlers.CreateProgram)
 	programs.Post("/all", handlers.GetPrograms)
-	programs.Delete("/:id", handlers.DeleteProgram)
+	programs.Put("/:id", handlers.DeleteProgram)
 	programs.Post("/:id", handlers.GetProgramById)
 	programs.Patch("/:id", handlers.UpdateProgram)
 
