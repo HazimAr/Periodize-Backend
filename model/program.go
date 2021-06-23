@@ -10,5 +10,5 @@ type Program struct {
 	Title      	string     	`json:"title"`
 	Descripion	string     	`json:"description"`
 	// Preset		bool		`json:"private"`
-	Days		[]Day		`json:"days"`
+	Days		[]*Day		`gorm:"-" json:"days"`
 }
