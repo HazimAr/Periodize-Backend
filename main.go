@@ -26,7 +26,8 @@ func main() {
 	godotenv.Load()
 	app := fiber.New()
 	app.Use(cors.New(cors.Config{
-		AllowOrigins: "http://localhost:3000, https://periodize.org",
+		AllowOrigins: "*",
+		// AllowOrigins: "http://localhost:3000, https://periodize.org",
 		AllowHeaders: "Origin, Content-Type, Accept",
 	}))
 
