@@ -14,6 +14,7 @@ import (
 )
 
 type User model.User
+
 type Session model.Session
 type Product model.Program
 

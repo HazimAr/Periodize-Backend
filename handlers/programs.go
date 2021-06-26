@@ -6,6 +6,7 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/gofiber/fiber/v2"
+	"gorm.io/datatypes"
 	"gorm.io/gorm"
 )
 
@@ -23,7 +24,7 @@ func CreateProgram(c *fiber.Ctx) error {
 
 	user := c.Locals("user").(User)
 	newProgram := Program{
-		ID:			uuid.New(),
+		ID:				uuid.New(),
 		UserRefer:	user.ID,
 		Title:      json.Title,
 		Descripion:	json.Descripion,
@@ -83,11 +84,12 @@ func GetProgramById(c *fiber.Ctx) error {
 }
 
 func UpdateProgram(c *fiber.Ctx) error {
+
 	type UpdateProgramRequest struct {
-		Name      	string 		`json:"name"`
-		Descripion 	string 		`json:"description"`
+		Title      	string     		`json:"title"`
+		Descripion	string     		`json:"description"`
 		Private		bool 		`json:"private"`
-		Experience  string		`json:"experience"`
+		Days 		datatypes.JSON		`json:"days"`
 		Sport		string		`json:"sport"`
 		Sessionid 	string 		`json:"sessionid"`
 	}
