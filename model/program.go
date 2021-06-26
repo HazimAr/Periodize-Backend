@@ -13,6 +13,7 @@ type Program struct {
 	UserRefer 	guuid.UUID 		`json:"-"`
 	Title      	string     		`json:"title"`
 	Descripion	string     		`json:"description"`
-	// Preset		bool		`json:"private"`
+	// Private		bool		`json:"private"`
 	Days		datatypes.JSON	`json:"days"`
+	// History		datatypes.JSON	`json:"history"`
 }
